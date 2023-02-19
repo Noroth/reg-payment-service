@@ -21,6 +21,18 @@ jobs:
         id: refref
         run: |
           echo ${{ github.ref }}
+        
+      - name: Check release version
+        id: check_release
+        run: |
+          if [[ ${{ github.ref }} == 'refs/heads/main' ]]; 
+          then
+            echo "incrementing minor version as we are on main"
+            echo "semver_part=minor" >> $GITHUB_OUTPUT
+          else
+            echo "incrementing patch version"
+            echo "semver_part=patch" >> $GITHUB_OUTPUT"
+          fi
 
       - name: Get Tag
         id: tag
@@ -31,18 +43,18 @@ jobs:
         uses: MCKanpolat/auto-semver-action@1.0.9
         id: versioning
         with:
-          releaseType: patch 
+          releaseType: ${{ steps.check_release.outputs.semver_part }} 
           incrementPerCommit: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Auto Increment Semver Action
-        if: github.ref == 'refs/heads/main'
-        uses: MCKanpolat/auto-semver-action@1.0.9
-        id: versioning
-        with:
-          releaseType: minor 
-          incrementPerCommit: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Auto Increment Semver Action
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: MCKanpolat/auto-semver-action@1.0.9
+      #   id: versioning
+      #   with:
+      #     releaseType: minor 
+      #     incrementPerCommit: false
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Next Release Number
         run: echo ${{ steps.versioning.outputs.version }}
