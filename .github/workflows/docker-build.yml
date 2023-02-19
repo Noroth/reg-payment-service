@@ -85,5 +85,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/noroth/$APP_NAME:latest
-            ghcr.io/noroth/$APP_NAME:${{ steps.versioning.outputs.version }}
+            ghcr.io/noroth/${{ env.APP_NAME }}:latest
+            ghcr.io/noroth/${{ env.APP_NAME }}:${{ steps.versioning.outputs.version }}
