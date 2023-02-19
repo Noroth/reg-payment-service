@@ -31,7 +31,7 @@ jobs:
             echo "semver_part=minor" >> $GITHUB_OUTPUT
           else
             echo "incrementing patch version"
-            echo "semver_part=patch" >> $GITHUB_OUTPUT"
+            echo "semver_part=patch" >> $GITHUB_OUTPUT
           fi
 
       - name: Get Tag
