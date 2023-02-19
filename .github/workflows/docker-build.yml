@@ -10,6 +10,8 @@ on:
     paths-ignore:
       - '**.md'
 
+env:
+  APP_NAME: reg-payment-service
 
 jobs:
   build:
@@ -46,15 +48,6 @@ jobs:
           releaseType: ${{ steps.check_release.outputs.semver_part }} 
           incrementPerCommit: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      
-      # - name: Auto Increment Semver Action
-      #   if: github.ref == 'refs/heads/main'
-      #   uses: MCKanpolat/auto-semver-action@1.0.9
-      #   id: versioning
-      #   with:
-      #     releaseType: minor 
-      #     incrementPerCommit: false
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Next Release Number
         run: echo ${{ steps.versioning.outputs.version }}
@@ -90,7 +83,7 @@ jobs:
           context: .
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/noroth/reg-payment-service:latest
-            ghcr.io/noroth/reg-pyament-service:${{ steps.versioning.outputs.version }}
+            ghcr.io/noroth/$APP_NAME:latest
+            ghcr.io/noroth/$APP_NAME:${{ steps.versioning.outputs.version }}
