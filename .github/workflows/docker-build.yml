@@ -1,8 +1,14 @@
 name: Build Container Image
 
 on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**.md'
 
 
 jobs:
@@ -10,6 +16,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Show ref
+        id: refref
+        run: |
+          echo ${{ github.ref }}
+
+      - name: Get Tag
+        id: tag
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      
+      - name: Auto Increment Semver Action
+        if: github.event_name == 'pull_request'
+        uses: MCKanpolat/auto-semver-action@1.0.9
+        id: versioning
+        with:
+          releaseType: patch 
+          incrementPerCommit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Auto Increment Semver Action
+        if: github.ref == 'refs/heads/main'
+        uses: MCKanpolat/auto-semver-action@1.0.9
+        id: versioning
+        with:
+          releaseType: minor 
+          incrementPerCommit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Next Release Number
+        run: echo ${{ steps.versioning.outputs.version }}
     
       - name: Docker meta
         id: meta
