@@ -92,5 +92,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
           tags: |
-            ghcr.io/Noroth/reg-payment-service:latest
-            ghcr.io/Noroth/reg-pyament-service:${{ steps.versioning.outputs.version }}
+            ghcr.io/noroth/reg-payment-service:latest
+            ghcr.io/noroth/reg-pyament-service:${{ steps.versioning.outputs.version }}
